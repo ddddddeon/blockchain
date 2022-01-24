@@ -5,28 +5,28 @@
         public static void Main()
         {
             var chain = new Chain();
-            var block = new Block(null, "first block");
+
+            var block = new Block(null, "block number 1");
             chain.Append(block);
+            Console.WriteLine(chain.Last.Previous);
 
-            var secondBlock = new Block(chain.Last, "second block");
-            chain.Append(secondBlock);
+            for (int i = 2; i < 10; i++)
+            {
 
-            var lastBlock = chain.Last;
-            Console.WriteLine("{0} - {1} - {2}", lastBlock.Id,
-                lastBlock.Contents,
-                BytesToHexString(lastBlock.Hash)
-            );
+                chain.Append(new Block(chain.Last, "block number " + i.ToString()));
+            }
 
-            var previousBlock = lastBlock.Previous;
-            Console.WriteLine("{0} - {1} - {2}", previousBlock.Id,
-                previousBlock.Contents,
-                BytesToHexString(previousBlock.Hash)
-            );
-        }
+            Block b = chain.Last;
 
-        public static string BytesToHexString(byte[] bytes)
-        {
-            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+            while (b != null)
+            {
+                Console.WriteLine("{0} - {1} - {2}", b.Id,
+                        b.Contents,
+                        b.HashString
+                );
+
+                b = b.Previous;
+            }
         }
     }
 }

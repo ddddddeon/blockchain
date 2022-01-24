@@ -14,6 +14,7 @@ namespace Blockchain
 
         public Block Append(Block block)
         {
+            block.Mine();
             Last = block;
             Length++;
             return Last;
