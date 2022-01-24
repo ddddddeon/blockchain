@@ -27,6 +27,8 @@
 
                 b = b.Previous;
             }
+
+            Console.WriteLine("Chain length: {0}", chain.Length);
         }
     }
 }
