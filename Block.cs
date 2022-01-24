@@ -15,7 +15,7 @@ namespace Blockchain
         {
             bool isFirst = previous == null;
 
-            Id = (!isFirst ? previous.Id : 0);
+            Id = (!isFirst ? previous.Id + 1 : 0);
             Nonce = GenerateNonce();
             Contents = contents;
 
@@ -28,13 +28,6 @@ namespace Blockchain
 
             Hash = SHA256.HashData(bytes);
             Previous = previous;
-        }
-
-        public Block Append(string contents)
-        {
-            // TODO validate
-            var block = new Block(this, contents);
-            return block;
         }
 
         private byte[] GenerateNonce()

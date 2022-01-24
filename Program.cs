@@ -4,13 +4,24 @@
     {
         public static void Main()
         {
+            var chain = new Chain();
             var block = new Block(null, "first block");
-            var secondBlock = block.Append("second block");
+            chain.Append(block);
 
-            Console.WriteLine(BytesToHexString(secondBlock.Hash));
-            Console.WriteLine(secondBlock.Contents);
-            Console.WriteLine(BytesToHexString(secondBlock.Previous.Hash));
-            Console.WriteLine(secondBlock.Previous.Contents);
+            var secondBlock = new Block(chain.Last, "second block");
+            chain.Append(secondBlock);
+
+            var lastBlock = chain.Last;
+            Console.WriteLine("{0} - {1} - {2}", lastBlock.Id,
+                lastBlock.Contents,
+                BytesToHexString(lastBlock.Hash)
+            );
+
+            var previousBlock = lastBlock.Previous;
+            Console.WriteLine("{0} - {1} - {2}", previousBlock.Id,
+                previousBlock.Contents,
+                BytesToHexString(previousBlock.Hash)
+            );
         }
 
         public static string BytesToHexString(byte[] bytes)
