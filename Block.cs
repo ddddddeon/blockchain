@@ -47,11 +47,12 @@ namespace Blockchain
         public byte[] Mine()
         {
             byte[] hash = new byte[] { };
+            byte[] nonce;
 
             Console.WriteLine("Mining block {0}...", HashString);
             do
             {
-                Nonce = GenerateNonce();
+                nonce = GenerateNonce();
                 hash = SHA256.HashData(GetAllBytes());
                 Console.WriteLine("{0}: {1}",
                     BytesToHexString(Nonce),
@@ -61,6 +62,7 @@ namespace Blockchain
             while (hash.FirstOrDefault() != 0);
 
             Hash = hash;
+            Nonce = nonce;
             HashString = BytesToHexString(Hash);
 
             Console.WriteLine("Hash computed! New hash is {0}", HashString);
