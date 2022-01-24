@@ -20,10 +20,8 @@ namespace Blockchain
             Id = (!IsFirst ? Previous.Id + 1 : 0);
             Nonce = GenerateNonce();
             Contents = contents;
-
             Hash = SHA256.HashData(GetAllBytes());
             HashString = BytesToHexString(Hash);
-
         }
 
         private byte[] GenerateNonce()
@@ -52,17 +50,13 @@ namespace Blockchain
             Console.WriteLine("Mining block {0}...", HashString);
             do
             {
-                nonce = GenerateNonce();
+                Nonce = GenerateNonce();
                 hash = SHA256.HashData(GetAllBytes());
-                Console.WriteLine("{0}: {1}",
-                    BytesToHexString(Nonce),
-                    BytesToHexString(hash)
-                );
+                //Console.WriteLine("{0}: {1}", BytesToHexString(Nonce), BytesToHexString(hash));
             }
-            while (hash.FirstOrDefault() != 0);
+            while (!(hash[0] == 0 && hash[1] == 0));
 
             Hash = hash;
-            Nonce = nonce;
             HashString = BytesToHexString(Hash);
 
             Console.WriteLine("Hash computed! New hash is {0}", HashString);

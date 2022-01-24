@@ -10,7 +10,7 @@
             chain.Append(block);
             Console.WriteLine(chain.Last.Previous);
 
-            for (int i = 2; i < 10; i++)
+            for (int i = 2; i < 1000; i++)
             {
 
                 chain.Append(new Block(chain.Last, "block number " + i.ToString()));
