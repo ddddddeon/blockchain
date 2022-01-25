@@ -69,7 +69,7 @@ namespace Blockchain
             return false;
         }
 
-        public void SetBytes()
+        private void SetBytes()
         {
             Bytes = Util.StringToBytes(
                 From.ToString() +
@@ -80,7 +80,7 @@ namespace Blockchain
             );
         }
 
-        public void HashBytes()
+        private void HashBytes()
         {
             Hash = SHA256.HashData(Bytes);
         }
