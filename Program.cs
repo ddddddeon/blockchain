@@ -6,9 +6,8 @@
         {
             var chain = new Chain();
 
+            // TODO remove Block.Contents entirely
             var block = new Block(null, "block number 1");
-            chain.Append(block);
-            Console.WriteLine(chain.Last.Previous);
 
             var wallet = new Wallet();
             var signature = wallet.Sign(Util.StringToBytes("chris is cool"));
@@ -17,6 +16,29 @@
             var wallet2 = new Wallet();
             var isVerified = wallet2.Verify(Util.StringToBytes("chris is cool"), wallet.PublicKey, signature);
             Console.WriteLine("verified? {0}", isVerified.ToString());
+
+            // TODO implement wallet.Send / wallet.Receive
+            var transaction = new Transaction(wallet.PublicKey, wallet2.PublicKey, 1.00);
+
+            var fromSignature = wallet.Sign(transaction.Bytes);
+            var toSignature = wallet2.Sign(transaction.Bytes);
+
+            Console.WriteLine("Sender signature: {0}\nRecipient signature: {1}", Util.BytesToHexString(fromSignature), Util.BytesToHexString(toSignature));
+
+            var fromVerified = transaction.Verify(wallet.PublicKey, fromSignature, true);
+            var toVerified = transaction.Verify(wallet2.PublicKey, toSignature, false);
+
+            Console.WriteLine("Sender signature verified: {0}\nRecipient signature verified: {1}", fromVerified, toVerified);
+
+            var published = transaction.Publish(block);
+
+            if (block.TransactionCount == block.MaxTransactions)
+            {
+                block.Mine();
+                chain.Append(block);
+            }
+
+
             /*
                         for (int i = 2; i < 1000; i++)
                         {

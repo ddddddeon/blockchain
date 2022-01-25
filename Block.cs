@@ -4,6 +4,9 @@ namespace Blockchain
 {
     public class Block
     {
+        public int MaxTransactions = 5;
+        public int TransactionCount { get; private set; } = 0;
+        public List<Transaction> Transactions { get; private set; } = new List<Transaction>();
         public bool IsFirst;
         public int Id { get; }
         public byte[] Nonce { get; private set; }
@@ -39,6 +42,12 @@ namespace Blockchain
                 Contents +
                 (!IsFirst ? Util.BytesToString(Previous.Hash) : SHA256.HashData(new byte[] { }))
             );
+        }
+
+        public bool AppendTransaction(Transaction transaction)
+        {
+            Transactions.Add(transaction);
+            return true;
         }
 
         public byte[] Mine()
