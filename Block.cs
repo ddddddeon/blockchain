@@ -1,4 +1,3 @@
-using System.Text;
 using System.Security.Cryptography;
 
 namespace Blockchain
@@ -21,7 +20,7 @@ namespace Blockchain
             Nonce = GenerateNonce();
             Contents = contents;
             Hash = SHA256.HashData(GetAllBytes());
-            HashString = BytesToHexString(Hash);
+            HashString = Util.BytesToHexString(Hash);
         }
 
         private byte[] GenerateNonce()
@@ -34,11 +33,11 @@ namespace Blockchain
 
         private byte[] GetAllBytes()
         {
-            return Encoding.ASCII.GetBytes(
+            return Util.StringToBytes(
                 Id.ToString() +
-                Encoding.ASCII.GetString(Nonce) +
+                Util.BytesToString(Nonce) +
                 Contents +
-                (!IsFirst ? Previous.Hash.ToString() : SHA256.HashData(new byte[] { }))
+                (!IsFirst ? Util.BytesToString(Previous.Hash) : SHA256.HashData(new byte[] { }))
             );
         }
 
@@ -57,15 +56,10 @@ namespace Blockchain
             while (!(hash[0] == 0 && hash[1] == 0));
 
             Hash = hash;
-            HashString = BytesToHexString(Hash);
+            HashString = Util.BytesToHexString(Hash);
 
             Console.WriteLine("Hash computed! New hash is {0}", HashString);
             return Hash;
-        }
-
-        public static string BytesToHexString(byte[] bytes)
-        {
-            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
     }
 }

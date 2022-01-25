@@ -10,25 +10,34 @@
             chain.Append(block);
             Console.WriteLine(chain.Last.Previous);
 
-            for (int i = 2; i < 1000; i++)
-            {
+            var wallet = new Wallet();
+            var signature = wallet.Sign(Util.StringToBytes("chris is cool"));
+            Console.WriteLine("chris is cool - signature: {0}", Util.BytesToHexString(signature));
 
-                chain.Append(new Block(chain.Last, "block number " + i.ToString()));
-            }
+            var wallet2 = new Wallet();
+            var isVerified = wallet2.Verify(Util.StringToBytes("chris is cool"), wallet.PublicKey, signature);
+            Console.WriteLine("verified? {0}", isVerified.ToString());
+            /*
+                        for (int i = 2; i < 1000; i++)
+                        {
 
-            Block b = chain.Last;
+                            chain.Append(new Block(chain.Last, "block number " + i.ToString()));
+                        }
 
-            while (b != null)
-            {
-                Console.WriteLine("{0} - {1} - {2}", b.Id,
-                        b.Contents,
-                        b.HashString
-                );
+                        Block b = chain.Last;
 
-                b = b.Previous;
-            }
+                        while (b != null)
+                        {
+                            Console.WriteLine("{0} - {1} - {2}", b.Id,
+                                    b.Contents,
+                                    b.HashString
+                            );
 
-            Console.WriteLine("Chain length: {0}", chain.Length);
+                            b = b.Previous;
+                        }
+
+                        Console.WriteLine("Chain length: {0}", chain.Length);
+                        */
         }
     }
 }
