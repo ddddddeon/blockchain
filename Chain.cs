@@ -14,11 +14,13 @@ namespace Blockchain
 
         public Block Append(Block block)
         {
-            Last = block;
-            Length++;
-            return Last;
+            if (block.Previous == Last)
+            {
+                Last = block;
+                Length++;
+                return Last;
+            }
+            return null;
         }
     }
-
-
 }

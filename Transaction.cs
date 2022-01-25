@@ -44,10 +44,10 @@ namespace Blockchain
 
         public bool Verify(RSAParameters signer, byte[] signature, bool isSender)
         {
-            var rsaFrom = new RSACryptoServiceProvider();
-            rsaFrom.ImportParameters(signer);
+            var rsa = new RSACryptoServiceProvider();
+            rsa.ImportParameters(signer);
 
-            if (rsaFrom.VerifyData(Bytes, SHA256.Create(), signature))
+            if (rsa.VerifyData(Bytes, SHA256.Create(), signature))
             {
                 if (isSender)
                 {
@@ -84,8 +84,5 @@ namespace Blockchain
         {
             Hash = SHA256.HashData(Bytes);
         }
-
     }
-
-
 }

@@ -33,10 +33,9 @@
             if (block.TransactionCount == 1 /* block.MaxTransactions */)
             {
                 block.Mine();
-                chain.Append(block);
+                Block appended = chain.Append(block);
+                Console.WriteLine("Block {0} added to the blockchain: {1}\nChain length: {2}", block.HashString, appended != null, chain.Length.ToString());
             }
-
-            Console.WriteLine("Block {0} added to the blockchain!\nChain length: {1}", block.HashString, chain.Length.ToString());
 
 
             /*
