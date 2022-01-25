@@ -52,8 +52,13 @@ namespace Blockchain
 
         public bool AddTransaction(Transaction transaction)
         {
-            Transactions.Add(transaction);
-            return true;
+            if (TransactionCount < MaxTransactions)
+            {
+                Transactions.Add(transaction);
+                TransactionCount++;
+                return true;
+            }
+            return false;
         }
 
         public byte[] Mine()

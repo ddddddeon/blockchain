@@ -6,17 +6,28 @@ namespace Blockchain
     {
         public RSAParameters From { get; private set; }
         public RSAParameters To { get; private set; }
+        public byte[] FromKey;
+        public byte[] ToKey;
         public double Amount { get; private set; }
         public byte[] FromSignature { get; private set; } = null;
         public byte[] ToSignature { get; private set; } = null;
         public byte[] Bytes { get; private set; }
+        public byte[] Hash { get; private set; }
 
         public Transaction(RSAParameters from, RSAParameters to, double amount)
         {
             From = from;
             To = to;
             Amount = amount;
-            // TODO check this
+
+            var fromRsa = new RSACryptoServiceProvider();
+            fromRsa.ImportParameters(From);
+            FromKey = fromRsa.ExportRSAPublicKey();
+
+            var toRsa = new RSACryptoServiceProvider();
+            toRsa.ImportParameters(To);
+            ToKey = toRsa.ExportRSAPublicKey();
+
             SetBytes();
         }
 
@@ -48,7 +59,11 @@ namespace Blockchain
                     ToSignature = signature;
                 }
 
-                SetBytes();
+                if (FromSignature != null && ToSignature != null)
+                {
+                    SetBytes();
+                    HashBytes();
+                }
                 return true;
             }
             return false;
@@ -56,7 +71,18 @@ namespace Blockchain
 
         public void SetBytes()
         {
-            Bytes = Util.StringToBytes(From.ToString() + To.ToString() + Amount.ToString());
+            Bytes = Util.StringToBytes(
+                From.ToString() +
+                To.ToString() +
+                Amount.ToString() +
+                FromSignature?.ToString() ?? "" +
+                ToSignature?.ToString() ?? ""
+            );
+        }
+
+        public void HashBytes()
+        {
+            Hash = SHA256.HashData(Bytes);
         }
 
     }
