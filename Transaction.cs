@@ -17,7 +17,7 @@ namespace Blockchain
             To = to;
             Amount = amount;
             // TODO check this
-            Bytes = Util.StringToBytes(From.ToString() + To.ToString() + Amount.ToString());
+            SetBytes();
         }
 
         // TODO publish to a p2p socket rather than a block
@@ -25,7 +25,7 @@ namespace Blockchain
         {
             if (FromSignature != null && ToSignature != null)
             {
-                block.AppendTransaction(this);
+                block.AddTransaction(this);
                 return true;
             }
             return false;
@@ -47,9 +47,16 @@ namespace Blockchain
                 {
                     ToSignature = signature;
                 }
+
+                SetBytes();
                 return true;
             }
             return false;
+        }
+
+        public void SetBytes()
+        {
+            Bytes = Util.StringToBytes(From.ToString() + To.ToString() + Amount.ToString());
         }
 
     }

@@ -1,3 +1,4 @@
+using System.Text;
 using System.Security.Cryptography;
 
 namespace Blockchain
@@ -6,22 +7,21 @@ namespace Blockchain
     {
         public int MaxTransactions = 5;
         public int TransactionCount { get; private set; } = 0;
-        public List<Transaction> Transactions { get; private set; } = new List<Transaction>();
+        public List<Transaction> Transactions { get; private set; }
         public bool IsFirst;
         public int Id { get; }
         public byte[] Nonce { get; private set; }
         public byte[] Hash { get; private set; }
         public string HashString { get; private set; }
         public Block Previous { get; }
-        public string Contents { get; } = String.Empty;
 
-        public Block(Block previous, string contents)
+        public Block(Block previous)
         {
             IsFirst = (previous == null);
             Previous = previous;
             Id = (!IsFirst ? Previous.Id + 1 : 0);
+            Transactions = new List<Transaction>();
             Nonce = GenerateNonce();
-            Contents = contents;
             Hash = SHA256.HashData(GetAllBytes());
             HashString = Util.BytesToHexString(Hash);
         }
@@ -36,15 +36,21 @@ namespace Blockchain
 
         private byte[] GetAllBytes()
         {
+            var transactionsConcat = new StringBuilder();
+            foreach (Transaction t in Transactions)
+            {
+                transactionsConcat.Append(t.Bytes);
+            }
+
             return Util.StringToBytes(
                 Id.ToString() +
                 Util.BytesToString(Nonce) +
-                Contents +
+                transactionsConcat +
                 (!IsFirst ? Util.BytesToString(Previous.Hash) : SHA256.HashData(new byte[] { }))
             );
         }
 
-        public bool AppendTransaction(Transaction transaction)
+        public bool AddTransaction(Transaction transaction)
         {
             Transactions.Add(transaction);
             return true;

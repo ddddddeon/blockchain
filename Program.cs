@@ -5,17 +5,10 @@
         public static void Main()
         {
             var chain = new Chain();
-
-            // TODO remove Block.Contents entirely
-            var block = new Block(null, "block number 1");
+            var block = new Block(null);
 
             var wallet = new Wallet();
-            var signature = wallet.Sign(Util.StringToBytes("chris is cool"));
-            Console.WriteLine("chris is cool - signature: {0}", Util.BytesToHexString(signature));
-
             var wallet2 = new Wallet();
-            var isVerified = wallet2.Verify(Util.StringToBytes("chris is cool"), wallet.PublicKey, signature);
-            Console.WriteLine("verified? {0}", isVerified.ToString());
 
             // TODO implement wallet.Send / wallet.Receive
             var transaction = new Transaction(wallet.PublicKey, wallet2.PublicKey, 1.00);
