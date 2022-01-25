@@ -27,6 +27,5 @@ namespace Blockchain
             rsa.ImportParameters(publicKey);
             return rsa.VerifyData(input, SHA256.Create(), signature);
         }
-
     }
 }
